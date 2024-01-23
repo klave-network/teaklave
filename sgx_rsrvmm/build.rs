@@ -15,11 +15,13 @@
 // specific language governing permissions and limitations
 // under the License..
 
-mod exception;
-mod list;
-mod register;
+use std::env;
 
-#[cfg(not(feature = "use_sgx_sdk"))]
-pub(crate) use exception::handle;
-
-pub use register::*;
+fn main() -> Result<(), &'static str> {
+    println!("cargo:rerun-if-changed=build.rs");
+    let target = env::var("TARGET").unwrap();
+    if target == "x86_64-sgx_sdk-linux-sgx" {
+        println!("cargo:rustc-cfg=feature=\"use_sgx_sdk\"");
+    }
+    Ok(())
+}

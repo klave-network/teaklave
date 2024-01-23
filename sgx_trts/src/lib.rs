@@ -41,16 +41,22 @@ extern crate alloc;
 
 #[macro_use]
 extern crate sgx_types;
+#[cfg(not(feature = "use_sgx_sdk"))]
 extern crate sgx_crypto_sys;
+#[cfg(not(feature = "use_sgx_sdk"))]
 extern crate sgx_tlibc_sys;
 
 #[macro_use]
 mod arch;
+#[cfg(not(feature = "use_sgx_sdk"))]
 mod asm;
+#[cfg(feature = "use_sgx_sdk")]
+mod asm_sgx_sdk;
 mod call;
 #[macro_use]
 mod elf;
 mod enclave;
+
 mod inst;
 #[cfg(not(feature = "hyper"))]
 mod pkru;
@@ -58,7 +64,10 @@ mod stackchk;
 mod version;
 mod xsave;
 
+#[cfg(not(feature = "use_sgx_sdk"))]
 pub mod capi;
+#[cfg(feature = "use_sgx_sdk")]
+pub mod capi_sgx_sdk;
 
 #[cfg(not(any(feature = "sim", feature = "hyper")))]
 pub mod aexnotify;

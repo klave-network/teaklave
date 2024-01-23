@@ -44,9 +44,15 @@ impl EncluInst {
 
     pub fn everify_report2(r: &AlignReport2Mac) -> Result<(), u32> {
         extern "C" {
+            #[cfg(not(feature = "use_sgx_sdk"))]
             fn everifyreport2(r: *const AlignReport2Mac) -> u32;
+            #[cfg(feature = "use_sgx_sdk")]
+            fn do_everifyreport2(r: *const AlignReport2Mac) -> u32;
         }
+        #[cfg(not(feature = "use_sgx_sdk"))]
         let error = unsafe { everifyreport2(r) };
+        #[cfg(feature = "use_sgx_sdk")]
+        let error = unsafe { do_everifyreport2(r) };
         if error == 0 {
             Ok(())
         } else {

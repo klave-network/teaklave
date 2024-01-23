@@ -19,6 +19,7 @@
 
 use crate::edmm::{self, PageType};
 use crate::tcs::tc;
+#[cfg(not(feature = "use_sgx_sdk"))]
 use crate::version::*;
 use crate::xsave;
 use core::convert::From;
@@ -52,12 +53,17 @@ macro_rules! trim_to_page {
     };
 }
 
+#[cfg(not(feature = "use_sgx_sdk"))]
 #[link_section = ".niprod"]
 #[no_mangle]
 pub static mut g_global_data: GlobalData = GlobalData {
     version: VERSION_UINT,
     data: [0_u8; GLOBAL_DATA_SIZE],
 };
+#[cfg(feature = "use_sgx_sdk")]
+extern "C" {
+    pub static mut g_global_data: GlobalData;
+}
 
 const GLOBAL_DATA_SIZE: usize = mem::size_of::<Global>() - mem::size_of::<usize>();
 

@@ -100,6 +100,7 @@ pub fn ocall<T>(idx: OCallIndex, ms: Option<&mut T>) -> SgxResult {
     }
 }
 
+#[cfg(not(feature = "use_sgx_sdk"))]
 #[no_mangle]
 pub unsafe extern "C" fn update_ocall_lastsp(context: &mut OCallContext) -> usize {
     let mut tc = tcs::current();

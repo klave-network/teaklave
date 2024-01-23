@@ -111,7 +111,10 @@ pub struct Image {
     pub entry_address: usize,
 }
 
+#[cfg(not(feature = "use_sgx_sdk"))]
 #[link_section = ".data.rel.ro"]
+static mut IMAGE: MaybeUninit<Image> = MaybeUninit::uninit();
+#[cfg(feature = "use_sgx_sdk")]
 static mut IMAGE: MaybeUninit<Image> = MaybeUninit::uninit();
 
 impl Image {

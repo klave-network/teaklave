@@ -15,11 +15,16 @@
 // specific language governing permissions and limitations
 // under the License..
 
-mod exception;
-mod list;
-mod register;
+use crate::enclave::MmLayout;
 
-#[cfg(not(feature = "use_sgx_sdk"))]
-pub(crate) use exception::handle;
+#[inline]
+#[no_mangle]
+pub extern "C" fn sgx_get_image_base() -> *const u8 {
+    MmLayout::image_base() as *const u8
+}
 
-pub use register::*;
+#[inline]
+#[no_mangle]
+pub extern "C" fn sgx_get_heap_base() -> *const u8 {
+    MmLayout::heap_base() as *const u8
+}

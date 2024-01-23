@@ -219,7 +219,18 @@ pub struct SysFeatures {
 
 unsafe impl ContiguousMemory for SysFeatures {}
 
+#[cfg(not(feature = "use_sgx_sdk"))]
 #[link_section = ".data.rel.ro"]
+static mut SYS_FEATURES: SysFeatures = SysFeatures {
+    version: Version::Sdk1_5,
+    xfrm: types::XFRM_LEGACY,
+    cpu_features: 0,
+    cpu_core_num: 0,
+    cpuinfo_table: [[0; 4]; 8],
+    is_edmm: false,
+    is_aexnotify: false,
+};
+#[cfg(feature = "use_sgx_sdk")]
 static mut SYS_FEATURES: SysFeatures = SysFeatures {
     version: Version::Sdk1_5,
     xfrm: types::XFRM_LEGACY,
@@ -232,9 +243,18 @@ static mut SYS_FEATURES: SysFeatures = SysFeatures {
 
 // Improve compatibility
 // e.g. intel-sgx-ssl handles CPUID with this global variable.
+#[cfg(not(feature = "use_sgx_sdk"))]
 #[link_section = ".data.rel.ro"]
 #[no_mangle]
 pub static mut g_cpu_feature_indicator: u64 = 0;
+#[cfg(feature = "use_sgx_sdk")]
+extern "C" {
+    static mut g_cpu_feature_indicator: u64;
+    static g_sdk_version: u32;
+    static g_cpu_core_num: u32;
+    static EDMM_supported: i32;
+    static g_aexnotify_supported: i32;
+}
 
 impl SysFeatures {
     pub fn init(raw: NonNull<SystemFeatures>) -> SgxResult<&'static SysFeatures> {
@@ -258,6 +278,28 @@ impl SysFeatures {
         unsafe {
             g_cpu_feature_indicator = feature.cpu_features;
         }
+        Ok(SysFeatures::get())
+    }
+
+    #[cfg(feature = "use_sgx_sdk")]
+    pub fn init_from_sgx_sdk() -> SgxResult<&'static SysFeatures> {
+        unsafe {
+            let version = Version::try_from(g_sdk_version).map_err(|_| SgxStatus::Unexpected)?;
+            let feature = SysFeatures::get_mut();
+
+            match version {
+                Version::Sdk1_5 | Version::Sdk3_0 => (),
+                _ => return Err(SgxStatus::Unexpected),
+            };
+
+            feature.version = version;
+            feature.xfrm = xsave::get_xfrm();
+            feature.cpu_core_num = g_cpu_core_num;
+            feature.is_edmm = EDMM_supported != 0;
+            feature.is_aexnotify = g_aexnotify_supported != 0;
+            feature.cpu_features = g_cpu_feature_indicator;
+        }
+
         Ok(SysFeatures::get())
     }
 

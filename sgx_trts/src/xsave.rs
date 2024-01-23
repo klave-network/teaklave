@@ -35,9 +35,9 @@ pub fn get_xfrm() -> u64 {
         }
     }
 
-    let enbaled = i32::from(xfrm != types::XFRM_LEGACY);
+    let enabled = i32::from(xfrm != types::XFRM_LEGACY);
     unsafe {
-        set_xsave_enabled(enbaled);
+        set_xsave_enabled(enabled);
     }
 
     #[cfg(feature = "sim")]
