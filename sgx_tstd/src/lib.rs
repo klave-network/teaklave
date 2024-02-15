@@ -298,6 +298,7 @@ pub mod arch {
 }
 
 pub use sgx_trts::macros::is_x86_feature_detected;
+pub use sgx_trts::veh;
 
 // Platform-abstraction modules
 mod sys;
