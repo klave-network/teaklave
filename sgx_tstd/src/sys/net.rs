@@ -195,9 +195,9 @@ impl Socket {
                 flags,
             )
         })?;
-        unsafe {
-            buf.advance(ret as usize);
-        }
+
+        buf.advance(ret as usize);
+
         Ok(())
     }
 

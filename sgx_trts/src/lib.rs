@@ -19,6 +19,7 @@
 
 #![no_std]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
+#![allow(internal_features)]
 #![feature(allocator_api)]
 #![feature(const_trait_impl)]
 #![feature(core_intrinsics)]
@@ -29,10 +30,10 @@
 #![feature(never_type)]
 #![feature(ptr_internals)]
 #![feature(thread_local)]
-#![cfg_attr(feature = "sim", feature(unchecked_math))]
 #![allow(clippy::missing_safety_doc)]
 #![allow(dead_code)]
 #![allow(non_camel_case_types)]
+#![allow(static_mut_refs)]
 
 #[cfg(all(feature = "sim", feature = "hyper"))]
 compile_error!("feature \"sim\" and feature \"hyper\" cannot be enabled at the same time");

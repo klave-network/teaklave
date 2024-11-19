@@ -66,10 +66,8 @@ impl FileDesc {
             libc::read(self.as_raw_fd(), MaybeUninit::slice_assume_init_mut(cursor.as_mut()))
         })?;
 
-        // Safety: `ret` bytes were written to the initialized portion of the buffer
-        unsafe {
-            cursor.advance(ret);
-        }
+        cursor.advance(ret);
+
         Ok(())
     }
 

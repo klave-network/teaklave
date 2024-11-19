@@ -14,7 +14,6 @@
 #![feature(std_internals)]
 #![feature(staged_api)]
 #![feature(rustc_attrs)]
-#![feature(c_unwind)]
 
 extern crate sgx_trts;
 

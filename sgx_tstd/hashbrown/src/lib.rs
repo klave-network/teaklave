@@ -10,6 +10,7 @@
 //! [CppCon talk]: https://www.youtube.com/watch?v=ncHmEUmJZf4
 
 #![no_std]
+#![allow(internal_features)]
 #![cfg_attr(
     feature = "nightly",
     feature(
@@ -20,8 +21,7 @@
         extend_one,
         allocator_api,
         slice_ptr_get,
-        maybe_uninit_array_assume_init,
-        strict_provenance
+        maybe_uninit_array_assume_init
     )
 )]
 #![allow(
@@ -36,6 +36,7 @@
 )]
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
+#![feature(strict_provenance_lints)]
 #![cfg_attr(feature = "nightly", warn(fuzzy_provenance_casts))]
 
 #[cfg(test)]

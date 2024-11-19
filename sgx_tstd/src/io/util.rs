@@ -202,10 +202,7 @@ impl Read for Repeat {
 
         let remaining = buf.capacity();
 
-        // SAFETY: the entire unfilled portion of buf has been initialized
-        unsafe {
-            buf.advance(remaining);
-        }
+        buf.advance(remaining);
 
         Ok(())
     }

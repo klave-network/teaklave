@@ -18,6 +18,7 @@
 #![no_std]
 #![cfg_attr(target_vendor = "teaclave", feature(rustc_private))]
 #![deny(unused_features)]
+#![allow(internal_features)]
 #![feature(const_trait_impl)]
 #![feature(core_intrinsics)]
 #![feature(dropck_eyepatch)]

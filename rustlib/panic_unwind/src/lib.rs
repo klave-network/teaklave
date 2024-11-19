@@ -22,7 +22,6 @@
 #![feature(rustc_attrs)]
 #![panic_runtime]
 #![feature(panic_runtime)]
-#![feature(c_unwind)]
 #![allow(internal_features)]
 
 extern crate alloc;
