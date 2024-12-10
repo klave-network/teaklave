@@ -61,7 +61,7 @@ __CPU_op_func_S(XOR, ^)
 
 __BEGIN_DECLS
 
-typedef unsigned int pid_t;
+typedef int pid_t;
 
 // ocall
 int sched_yield(void);
