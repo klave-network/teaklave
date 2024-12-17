@@ -24,27 +24,18 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 
-#ifndef _SYS_EPOLL_H_
-#define _SYS_EPOLL_H_
+#ifndef _SYS_TIMESPEC_H_
+#define _SYS_TIMESPEC_H_
 
-#include <stdint.h>
+#ifdef _IN_ENCLAVE
 
-typedef union epoll_data {
-    void *ptr;
-    int fd;
-    uint32_t u32;
-    uint64_t u64;
-} epoll_data_t;
+#include <time.h>
 
-struct epoll_event {
-    uint32_t events;
-    epoll_data_t data;
-} __attribute__ ((__packed__));
+struct timespec {
+    __time_t  tv_sec;
+    long      tv_nsec;
+};
 
-// ocall
-int epoll_create1(int);
-int epoll_create(int);
-int epoll_ctl(int, int, int, struct epoll_event *);
-int epoll_wait(int, struct epoll_event *, int, int);
+#endif /* _IN_ENCLAVE*/
 
-#endif /* _SYS_EPOLL_H_ */
+#endif /* _SYS_TIMESPEC_H_ */
