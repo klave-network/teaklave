@@ -158,7 +158,13 @@ impl Image {
 
     #[inline]
     fn elrange_size() -> usize {
-        arch::Global::get().elrange_size as usize
+        let global_data = arch::Global::get();
+
+        if global_data.elrange_size != 0 {
+            global_data.elrange_size as usize
+        } else {
+            global_data.enclave_size
+        }
     }
 
     #[inline]
